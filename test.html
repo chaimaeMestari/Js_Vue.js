@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CheckList</title>
+    <script src="https://unpkg.com/vue@3"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>Hello from me</h1>
+        <!-- <input type="text" v-model="message">
+        <a herf="#" @click="ajoute" v-if="message != ''">Ajouter</a>
+        {{message}} -->
+        <!-- <p v-bind:title="tds" v-for="td in tds" @click="inverser">
+            {{ td }}
+        </p> -->
+        <ajout @nouvellenote="ajoute"></ajout>
+        <note v-for="td in tds" v-bind:content="td" @click="inverser"></note>
+        
+    </div>
+
+    <script>
+        //instancier un modele de vue
+        const vm = Vue.createApp({
+            //fonction data ==> returne un objet qui contient des données + les données quand on va manipuler
+            data(){
+                return{
+                    nom : 'cava',
+                    tds: ["Bonjour", "hello", "hola"]
+                }
+            },
+            methods:{
+                inverser(){
+                    this.tds.reverse();
+                },
+                ajoute(message){
+                    this.tds.push(message);
+                    // this.message = '';
+                }
+            }
+
+        })
+        vm.component('note', {
+            props: ['content'],
+            template: `<p> {{ content }} </p>`
+            
+        });
+
+        vm.component('ajout',{
+            props: [],
+            emits:['nouvellenote'],
+            data(){
+                return{
+                    interne:'nv msg'
+                }
+            },
+            methods:{
+                ajoute1(){
+                    this.$emit('nouvellenote', this.interne);
+                    this.interne='';
+                }
+            },
+            template: ` <input type="text" v-model="interne">
+                        <a herf="#" @click="ajoute1" v-if="interne != ''">Ajouter</a>
+                        {{interne}}`
+        });
+        vm.mount('#app');
+    </script>
+</body>
+</html>
